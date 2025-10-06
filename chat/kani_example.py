@@ -4,7 +4,7 @@ import os
 from kani import Kani
 from kani.engines.huggingface import HuggingEngine
 
-from model.mlx_engine import MlxEngine
+from chat.mlx_engine import MlxEngine
 
 engine = HuggingEngine(
     model_id="meta-llama/Llama-3.1-8B-Instruct",

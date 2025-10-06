@@ -9,5 +9,9 @@ dependencies = [
     "ipywidgets>=8.1.7",
     "kani[all]>=1.6.1",
     "mlx-lm>=0.28.2",
+    "numpy>=2.3.3",
+    "openai-whisper>=20250625",
+    "scipy>=1.16.2",
+    "sounddevice>=0.5.2",
     "torch>=2.8.0",
 ]
