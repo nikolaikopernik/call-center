@@ -1,7 +1,8 @@
 import asyncio
 import torch
 import os
-from kani import Kani
+from datetime import datetime
+from kani import Kani, ai_function, chat_in_terminal
 from kani.engines.huggingface import HuggingEngine
 
 from chat.mlx_engine import MlxEngine
@@ -19,20 +20,34 @@ engine = HuggingEngine(
 # )
 
 # engine = MlxEngine("mlx-community/Meta-Llama-3-8B-Instruct-4bit")
-ai = Kani(engine, system_prompt="You are a call center assistant Susan which helps patients of St Antonius medical clinic with scheduling appointments."
-                                "You ask questions one by one to not overload clients with many parallel questions.")
+
+
+# class MyKani(Kani):
+#     # @ai_function()
+#     def get_date(self):
+#         """Get the current date"""
+#         datetime.today().strftime('%Y-%m-%d')
+
+ai = Kani(engine,
+          system_prompt="You are a call center assistant Susan which helps patients of St Antonius medical clinic with scheduling appointments."
+                        "You ask questions one by one to not overload clients with many parallel questions.")
+
+
+async def run_full_round_sync(bot: Kani, prompt: str) -> str:
+    return "".join([chunk async for chunk in bot.full_round_str(prompt, max_function_rounds=1)])
 
 # define your function normally, using `async def` instead of `def`
 async def chat_with_kani():
     while True:
         user_message = input("USER: ")
-        if user_message=="bye":
+        if user_message == "bye":
             return
         # now, you can use `await` to call kani's async methods
         message = await ai.chat_round_str(user_message)
         if "<|eot_id|>" in message:
             message = message.split("<eoi_id>", 1)[0]
         print("AI:", message)
+
 
 # use `asyncio.run` to call your async function to start the program
 asyncio.run(chat_with_kani())
